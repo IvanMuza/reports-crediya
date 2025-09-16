@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Report {
+public class ApprovedLoansReport {
     private String metric;
     private Long value;
 }

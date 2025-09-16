@@ -1,23 +1,23 @@
 package co.com.reports.usecase.loansreport;
 
-import co.com.reports.model.report.Report;
-import co.com.reports.model.report.gateways.ReportRepository;
+import co.com.reports.model.report.ApprovedLoansReport;
+import co.com.reports.model.report.gateways.ApprovedLoansReportRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class UpdateApprovedLoansReportUseCase {
-    private final ReportRepository reportRepository;
+    private final ApprovedLoansReportRepository approvedLoansReportRepository;
 
-    public Mono<Report> incrementCounter() {
-        return reportRepository.findByMetric("total_approved")
-                .defaultIfEmpty(Report.builder()
-                        .metric("total_approved")
+    public Mono<ApprovedLoansReport> incrementCounter() {
+        return approvedLoansReportRepository.findByMetric("report_approved")
+                .defaultIfEmpty(ApprovedLoansReport.builder()
+                        .metric("report_approved")
                         .value(0L)
                         .build())
-                .flatMap(report -> {
-                    report.setValue(report.getValue() + 1);
-                    return reportRepository.save(report);
+                .flatMap(approvedLoansReport -> {
+                    approvedLoansReport.setValue(approvedLoansReport.getValue() + 1);
+                    return approvedLoansReportRepository.save(approvedLoansReport);
                 });
     }
 }
