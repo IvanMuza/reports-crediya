@@ -14,12 +14,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Handler {
 
-//    private final GetApprovedLoansReportUseCase getApprovedLoansReportUseCase;
-//
-//    public Mono<ServerResponse> getApprovedLoans(ServerRequest request) {
-//        return getApprovedLoansReportUseCase.getTotalApprovedLoans()
-//                .flatMap(total -> ServerResponse.ok()
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .bodyValue(Map.of("totalApprovedLoans", total)));
-//    }
+    private final GetApprovedLoansReportUseCase getApprovedLoansReportUseCase;
+
+    public Mono<ServerResponse> listenGetApprovedLoans(ServerRequest request) {
+        return getApprovedLoansReportUseCase.getReport()
+                .flatMap(report -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(report));
+    }
 }

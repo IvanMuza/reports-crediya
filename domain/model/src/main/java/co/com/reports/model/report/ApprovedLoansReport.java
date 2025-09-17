@@ -5,12 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Report {
+public class ApprovedLoansReport {
     private String metric;
-    private Long value;
+    private Long totalApprovedLoans;
+    private Double amountTotalApprovedLoans;
+    private LocalDateTime updatedAt;
 }
