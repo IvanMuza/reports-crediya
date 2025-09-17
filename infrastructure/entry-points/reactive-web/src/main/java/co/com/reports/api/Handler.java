@@ -17,9 +17,9 @@ public class Handler {
     private final GetApprovedLoansReportUseCase getApprovedLoansReportUseCase;
 
     public Mono<ServerResponse> listenGetApprovedLoans(ServerRequest request) {
-        return getApprovedLoansReportUseCase.getTotalApprovedLoans()
-                .flatMap(total -> ServerResponse.ok()
+        return getApprovedLoansReportUseCase.getReport()
+                .flatMap(report -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(Map.of("totalApprovedLoans", total)));
+                        .bodyValue(report));
     }
 }

@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.metrics.MetricPublisher;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+
 
 import java.net.URI;
 
@@ -18,13 +19,14 @@ public class DynamoDBConfig {
 
     @Bean
     @Profile({"local"})
-    public DynamoDbAsyncClient amazonDynamoDB(@Value("${aws.dynamodb.endpoint}") String endpoint,
-                                              @Value("${aws.region}") String region,
+    public DynamoDbAsyncClient amazonDynamoDB(@Value("${aws.dynamodb.region}") String region,
+                                              @Value("${aws.dynamodb.profile}") String profile,
                                               MetricPublisher publisher) {
         return DynamoDbAsyncClient.builder()
-                .credentialsProvider(ProfileCredentialsProvider.create("default"))
+                .credentialsProvider(DefaultCredentialsProvider.builder()
+                        .profileName(profile)
+                        .build())
                 .region(Region.of(region))
-                .endpointOverride(URI.create(endpoint))
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .build();
     }

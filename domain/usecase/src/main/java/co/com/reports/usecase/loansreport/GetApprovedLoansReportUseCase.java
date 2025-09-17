@@ -9,9 +9,15 @@ import reactor.core.publisher.Mono;
 public class GetApprovedLoansReportUseCase {
     private final ApprovedLoansReportRepository approvedLoansReportRepository;
 
-    public Mono<Long> getTotalApprovedLoans() {
+    public Mono<ApprovedLoansReport> getReport() {
         return approvedLoansReportRepository.findByMetric("report_approved")
-                .map(ApprovedLoansReport::getValue)
-                .switchIfEmpty(Mono.just(0L));
+                .switchIfEmpty(Mono.just(
+                        ApprovedLoansReport.builder()
+                                .metric("report_approved")
+                                .totalApprovedLoans(0L)
+                                .amountTotalApprovedLoans(0.0)
+                                .updatedAt(null)
+                                .build()
+                ));
     }
 }
