@@ -26,7 +26,7 @@ entrypoint:
     queueUrl: "${AWS_SQS_PUBLISH_REPORT_QUEUE_URL}"
     waitTimeSeconds: 20
     maxNumberOfMessages: 10
-    visibilityTimeoutSeconds: 10
+    visibilityTimeoutSeconds: 60
     numberOfThreads: 1
 security:
   jwt:
