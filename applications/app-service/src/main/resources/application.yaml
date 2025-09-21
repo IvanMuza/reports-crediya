@@ -4,22 +4,32 @@ spring:
   application:
     name: "Reports"
   profiles:
-    active: local
+    active: "Prod"
 aws:
   dynamodb:
     region: "${AWS_REGION:us-east-1}"
-    profile: "${AWS_PROFILE:ivanmuza-labs-824013493466-AdministratorAccess}"
+    profile: "${AWS_PROFILE:default}"
+  region: "${AWS_REGION:us-east-1}"
+  secretName: "prod/CrediYa/Reports/Secrets"
 management:
   endpoints:
     web:
       exposure:
-        include: "health,prometheus"
+        include: "health,info,prometheus"
   endpoint:
     health:
       probes:
         enabled: true
+      show-details: never
+logging:
+  level:
+    com.credi.ya: INFO
+    org.springframework: WARN
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 cors:
-  allowed-origins: "http://localhost:8080,http://localhost:8081,http://localhost:4200"
+  allowed-origins: "${CORS_ALLOWED_ORIGINS}"
 entrypoint:
   sqs:
     region: "${AWS_REGION:us-east-1}"
@@ -28,6 +38,3 @@ entrypoint:
     maxNumberOfMessages: 10
     visibilityTimeoutSeconds: 60
     numberOfThreads: 1
-security:
-  jwt:
-    secret: "${JWT_SECRET}"
