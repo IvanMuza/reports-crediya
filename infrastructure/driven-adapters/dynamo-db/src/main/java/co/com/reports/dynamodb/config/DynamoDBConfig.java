@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 public class DynamoDBConfig {
 
     @Bean
-    @Profile({"local"})
+    @Profile({"local", "Prod"})
     public DynamoDbAsyncClient amazonDynamoDB(@Value("${aws.dynamodb.region}") String region,
                                               @Value("${aws.dynamodb.profile}") String profile,
                                               MetricPublisher publisher) {
@@ -29,7 +29,7 @@ public class DynamoDBConfig {
     }
 
     @Bean
-    @Profile({"Dev", "Prod"})
+    @Profile({"Dev"})
     public DynamoDbAsyncClient amazonDynamoDBAsync(MetricPublisher publisher, @Value("${aws.region}") String region) {
         return DynamoDbAsyncClient.builder()
                 .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
