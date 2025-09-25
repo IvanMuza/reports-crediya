@@ -5,6 +5,10 @@ spring:
     name: "Reports"
   profiles:
     active: "Prod"
+  devtools:
+    restart:
+      enabled: false
+    add-properties: false
 aws:
   dynamodb:
     region: "${AWS_REGION:us-east-1}"
