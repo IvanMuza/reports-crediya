@@ -1,0 +1,47 @@
+name: Deploy Reports Workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::824013493466:role/GitHubAction-AssumeRoleWithAction
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 \
+          | docker login --username AWS --password-stdin 824013493466.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build, tag, and push image to ECR
+        run: |
+          IMAGE_REPO_NAME=crediya/reports
+          IMAGE_TAG=latest
+
+          docker build -f deployment/Dockerfile -t $IMAGE_REPO_NAME .
+          docker tag $IMAGE_REPO_NAME:$IMAGE_TAG 824013493466.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+          docker push 824013493466.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+
+      - name: Deploy to ECS
+        run: |
+          CLUSTER_NAME=crediya-cluster
+          SERVICE_NAME=crediya-reports-task-service
+          
+          aws ecs update-service \
+            --cluster $CLUSTER_NAME \
+            --service $SERVICE_NAME \
+            --force-new-deployment
