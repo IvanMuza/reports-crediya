@@ -28,15 +28,4 @@ public class SecretProvider {
             }
         });
     }
-
-//    public Mono<String> getSqsPublishQueueUrl() {
-//        return Mono.defer(() -> {
-//            try {
-//                return secretsManager.getSecret(secretName, SecretManager.class)
-//                        .map(SecretManager::getSqsPublishReportQueueUrl);
-//            } catch (SecretException e) {
-//                return Mono.error(e);
-//            }
-//        });
-//    }
 }
